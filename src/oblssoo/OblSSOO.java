@@ -77,6 +77,7 @@ public class OblSSOO {
     
     public static void iniciarEjecucion() throws InterruptedException{
         s.setEnEjecucion();
+        
         while(s.getCantCola() != 0)
         {
             s.siguienteInstante();

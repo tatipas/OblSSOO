@@ -10,8 +10,10 @@ public class Proceso {
     private byte id;
     private Queue<Instruccion> colaInst;
     private byte estado;
+    private Duration tRequeridoInst;
     private Duration tiempoInst;
     private String instrucciones;
+    //private Duration tiempoRequerido;
 
     public Proceso(String s) {
         this.estado = 0; //1-> listo // 2->enEjecucion // 3->Bloqueado;
@@ -19,10 +21,32 @@ public class Proceso {
         this.instrucciones = s;
         this.colaInst = new LinkedList<>();
         encolarInstrucciones(s);
+        this.tRequeridoInst = Sistema.getInstByID(s.charAt(0)).getTiempoCPU();
+        //this.tiempoRequerido = calcularTiempoRequerido();
+    }
+
+    /*public Duration getTiempoRequerido() {
+        return tiempoRequerido;
+    }*/
+    
+    public Duration calcularTiempoRequerido(){
+        Duration res=ZERO;
+        for (int i = 0; i < instrucciones.length(); i++) {
+            res= res.plus(Sistema.getInstByID(instrucciones.charAt(i)).getTiempoCPU());
+        }
+        return res;
     }
 
     public byte getId() {
         return id;
+    }
+
+    public Duration gettRequeridoInst() {
+        return tRequeridoInst;
+    }
+
+    public void settRequeridoInst(Duration tRequeridoInst) {
+        this.tRequeridoInst = tRequeridoInst;
     }
 
     public void setId(byte id) {
@@ -74,9 +98,11 @@ public class Proceso {
     }
     
     public void despacharInstr() {
+        //System.out.println("Se completó: "+ this.colaInst.element().toString());
         this.colaInst.remove();
         if (getCantI() > 0) {
             this.tiempoInst = this.colaInst.element().getTiempoCPU();
+            this.tRequeridoInst = this.colaInst.element().getTiempoCPU();
         }
     }
 

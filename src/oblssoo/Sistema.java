@@ -18,6 +18,7 @@ public class Sistema {
     private Usuario enSesion;
     private Duration quantum;
     private Duration tiempoEjec;
+    
 
     public Sistema(long q) {
         this.listaProcesos = new ArrayList<>();
@@ -51,6 +52,7 @@ public class Sistema {
         this.enEjecucion = colaDeEjecucion.element();
         colaDeEjecucion.element().setEstadoEnEjecucion();
         System.out.println(enEjecucion.toString() + " ha tomado el procesador");
+        
     }
 
     public Usuario getEnSesion() {
@@ -110,6 +112,10 @@ public class Sistema {
     }
 
     public void siguienteInstante() throws InterruptedException {
+        
+        if(enEjecucion.getTiempoInst().equals(enEjecucion.gettRequeridoInst())){
+            System.out.println("En ejecución "+enEjecucion.getInstEnEjecucion().toString());
+        }
         Thread.sleep(1000);
         agregarTiempoEjec(1);
         enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
