@@ -11,16 +11,14 @@ public class Proceso {
     private Queue<Instruccion> colaInst;
     private byte estado;
     private Duration tiempoInst;
-    private int cantI;
     private String instrucciones;
 
     public Proceso(String s) {
         this.estado = 0; //1-> listo // 2->enEjecucion // 3->Bloqueado;
-        this.cantI = 0;
         this.tiempoInst = ZERO;
         this.instrucciones = s;
         this.colaInst = new LinkedList<>();
-            encolarInstrucciones(s);
+        encolarInstrucciones(s);
     }
 
     public byte getId() {
@@ -56,11 +54,11 @@ public class Proceso {
     }
 
     public void encolarInstr(Instruccion i) {
-        if (this.cantI == 0) {
+        if (getCantI() == 0) {
             this.tiempoInst = i.getTiempoCPU();
         }
         colaInst.add(i);
-        this.cantI ++;
+
     }
 
     public Duration getTiempoInst() {
@@ -72,23 +70,18 @@ public class Proceso {
     }
 
     public int getCantI() {
-        return cantI;
+        return colaInst.size();
     }
-
-    public void setCantI(int cantI) {
-        this.cantI = cantI;
-    }
-
+    
     public void despacharInstr() {
         this.colaInst.remove();
-        this.cantI--;
-        if (cantI > 0) {
+        if (getCantI() > 0) {
             this.tiempoInst = this.colaInst.element().getTiempoCPU();
-        } 
+        }
     }
 
     public void restarTiempo(long t) {
-        tiempoInst.minusSeconds(1);
+        tiempoInst = tiempoInst.minusSeconds(1);
         if (tiempoInst.isZero()) {
             despacharInstr();
         }
@@ -105,7 +98,7 @@ public class Proceso {
 
     @Override
     public String toString() {
-        return ("Proceso" + this.getId()) + "| Instrucciones: " + getInstrucciones();
+        return ("Proceso " + this.getId()) + " | Instrucciones: " + getInstrucciones();
     }
 
     public boolean equals(Proceso u) {
@@ -117,6 +110,8 @@ public class Proceso {
             encolarInstr(Sistema.getInstByID(s.charAt(i)));
         }
     }
-    
 
+    public Instruccion getInstEnEjecucion(){
+        return colaInst.element();
+    }
 }

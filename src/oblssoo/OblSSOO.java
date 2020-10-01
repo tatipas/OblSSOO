@@ -34,7 +34,7 @@ public class OblSSOO {
 
         Proceso p1 = new Proceso("AABBCD");
         Proceso p2 = new Proceso("BABDCC");
-        Proceso p3 = new Proceso("CDBCCA");
+        Proceso p3 = new Proceso("CDA");
         Proceso p4 = new Proceso("ABCDDB");
 
         s.agregarProceso(p1);
@@ -64,7 +64,8 @@ public class OblSSOO {
             Proceso p = s.getProcesoByID(id);
             a[i] = p;
             s.encolar(p);
-            System.out.println(p.toString() + "esta en la posicion " + (i + 1) + " en la cola de ejecucion");
+            System.out.println(p.toString() + " esta en la posicion1"
+                    + " " + (i + 1) + " en la cola de ejecucion");
         }
         System.out.println("Cola de ejecucion: ");
         for (int i = 0; i < l; i++) {

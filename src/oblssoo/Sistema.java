@@ -5,6 +5,7 @@ import java.util.Queue;
 import java.time.*;
 import static java.time.Duration.ZERO;
 import static java.time.temporal.ChronoUnit.SECONDS;
+import java.util.LinkedList;
 
 public class Sistema {
 
@@ -13,7 +14,6 @@ public class Sistema {
     private ArrayList<Usuario> listaUsuarios;
     private ArrayList<Proceso> listaBloqueados;
     private static Queue<Proceso> colaDeEjecucion;
-    private byte cantCola;
     private Proceso enEjecucion;
     private Usuario enSesion;
     private Duration quantum;
@@ -24,12 +24,11 @@ public class Sistema {
         this.listaInstrucciones = new ArrayList<>();
         this.listaUsuarios = new ArrayList<>();
         this.listaBloqueados = new ArrayList<>();
-        this.colaDeEjecucion = null;
+        this.colaDeEjecucion = new LinkedList<>();;
         this.enEjecucion = null;
         this.enSesion = null;
         this.quantum = Duration.of(q, SECONDS);
         this.tiempoEjec = ZERO;
-        this.cantCola = 0;
     }
 
     public Duration getQuantum() {
@@ -41,7 +40,7 @@ public class Sistema {
     }
 
     public byte getCantCola() {
-        return cantCola;
+        return (byte)colaDeEjecucion.size();
     }
 
     public Proceso getEnEjecucion() {
@@ -51,7 +50,7 @@ public class Sistema {
     public void setEnEjecucion() {
         this.enEjecucion = colaDeEjecucion.element();
         colaDeEjecucion.element().setEstadoEnEjecucion();
-                    System.out.println(enEjecucion.toString() + " ha tomado el procesador");
+        System.out.println(enEjecucion.toString() + " ha tomado el procesador");
     }
 
     public Usuario getEnSesion() {
@@ -65,27 +64,29 @@ public class Sistema {
     public void encolar(byte id) {
         Proceso p = getProcesoByID(id);
         this.colaDeEjecucion.add(p);
-        this.cantCola++;
+
     }
 
     public void encolar(Proceso p) {
 
         this.colaDeEjecucion.add(p);
-        this.cantCola++;
     }
 
     public void desencolar() {
-        this.colaDeEjecucion.remove();
         System.out.println(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
+        this.colaDeEjecucion.remove();
+        if(getCantCola() != 0){
         setEnEjecucion();
+        }
         this.tiempoEjec = ZERO;
-        this.cantCola--;
     }
 
     public void timeout() {
         Proceso p = this.colaDeEjecucion.poll();
         this.colaDeEjecucion.add(p);
         p.setEstadoListo();
+        this.colaDeEjecucion.element().setEstadoEnEjecucion();
+        this.enEjecucion = this.colaDeEjecucion.element();
     }
 
     public void agregarProceso(Proceso p) {
@@ -180,13 +181,13 @@ public class Sistema {
     }
 
     public void imprimirProcesos() {
-        for (int i = 0; i <= getListaProcesos().size(); i++) {
+        for (int i = 0; i < getListaProcesos().size(); i++) {
             System.out.println(getListaProcesos().get(i).toString());
         }
     }
 
     public void imprimirUsuarios() {
-        for (int i = 0; i <= getListaUsuarios().size(); i++) {
+        for (int i = 0; i < getListaUsuarios().size(); i++) {
             System.out.println(getListaUsuarios().get(i).toString());
         }
     }
