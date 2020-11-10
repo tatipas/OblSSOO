@@ -4,19 +4,17 @@
  * and open the template in the editor.
  */
 package oblssoo;
+import java.util.ArrayList;
 
-/**
- *
- * @author Graziano
- */
 public class Programa {
 
     private String instrucciones;
     private byte id;
+    private ArrayList<Recurso> listaRecursos;
 
     public Programa(String s) {
         this.instrucciones = s;
-        //this.tiempoRequerido = calcularTiempoRequerido();
+
     }
 
     public String getInstrucciones() {
@@ -31,6 +29,7 @@ public class Programa {
         this.id = id;
     }
 
+    @Override
     public String toString() {
         String s = "Programa: " + id + " | Instrucciones: " + this.instrucciones;
         return s;

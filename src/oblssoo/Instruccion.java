@@ -7,10 +7,18 @@ public class Instruccion {
 
     private char id;
     private Duration tiempoCPU;
+    private Recurso recurso;
+    private String descr;
 
-    public Instruccion(char id, long tiempoCPU) {
+    public Instruccion(char id, long tiempo, Recurso r, String s) {
         this.id = id;
-        this.tiempoCPU = Duration.of(tiempoCPU, SECONDS);
+        this.tiempoCPU = Duration.of(tiempo, SECONDS);
+        this.recurso = r;
+        this.descr = s;
+    }
+    
+    public void setRecurso(Recurso r){
+        this.recurso = r;
     }
 
     public char getId() {
@@ -33,8 +41,12 @@ public class Instruccion {
         return getId() == u.getId();
     }
     
+    public String getDescripcion(){
+        return descr;
+    }
+    
     @Override
     public String toString(){
-        return "Intruccion "+getId()+" | Duracion: " + getTiempoCPU().toString();
+        return "Intruccion "+getId()+":" + getDescripcion();
     }
 }

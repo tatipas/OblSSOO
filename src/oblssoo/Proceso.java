@@ -26,13 +26,8 @@ public class Proceso {
         encolarInstrucciones(instrucciones);
         this.tRequeridoInst = Sistema.getInstByID(instrucciones.charAt(0)).getTiempoCPU();
         this.pos = 0;
-        //this.tiempoRequerido = calcularTiempoRequerido();
     }
 
-    /*public Duration getTiempoRequerido() {
-        return tiempoRequerido;
-    }*/
-    
     public Duration calcularTiempoRequerido(){
         Duration res=ZERO;
         for (int i = 0; i < instrucciones.length(); i++) {
@@ -152,5 +147,9 @@ public class Proceso {
 
     public Instruccion getInstEnEjecucion(){
         return colaInst.element();
+    }
+    
+    public boolean estaListo(){
+        return getEstado() == 1;
     }
 }

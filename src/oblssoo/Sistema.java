@@ -12,6 +12,7 @@ public class Sistema {
     private static ArrayList<Proceso> listaProcesos;
     private static ArrayList<Programa> listaProgramas;
     private static ArrayList<Instruccion> listaInstrucciones;
+    private static ArrayList<Recurso> listaRecursos;
     private ArrayList<Usuario> listaUsuarios;
     private ArrayList<Proceso> listaBloqueados;
     private static Queue<Proceso> colaDeEjecucion;
@@ -22,11 +23,12 @@ public class Sistema {
 
     public Sistema(long q) {
         this.listaProcesos = new ArrayList<>();
-                this.listaProgramas = new ArrayList<>();
+        this.listaProgramas = new ArrayList<>();
+        this.listaRecursos = new ArrayList<>();
         this.listaInstrucciones = new ArrayList<>();
         this.listaUsuarios = new ArrayList<>();
         this.listaBloqueados = new ArrayList<>();
-        this.colaDeEjecucion = new LinkedList<>();;
+        this.colaDeEjecucion = new LinkedList<>();
         this.enEjecucion = null;
         this.enSesion = null;
         this.quantum = Duration.of(q, SECONDS);
@@ -56,6 +58,15 @@ public class Sistema {
 
     }
 
+    public static ArrayList<Recurso> getListaRecursos() {
+        return listaRecursos;
+    }
+
+    public void agregarRecurso(Recurso p) {
+        this.getListaRecursos().add(p);
+        p.setId((byte) listaRecursos.size());
+    }
+
     public Usuario getEnSesion() {
         return enSesion;
     }
@@ -64,16 +75,9 @@ public class Sistema {
         this.enSesion = u;
     }
 
-    /*public void encolar(byte id) {
-        Programa p = getProgramaByID(id);
-        this.colaDeEjecucion.add(p);
-
-    }*/
-
     public void encolar(Proceso p) {
-        
         this.colaDeEjecucion.add(p);
-        p.setId((byte)colaDeEjecucion.size());
+        p.setId((byte) colaDeEjecucion.size());
     }
 
     public void desencolar() {
@@ -97,8 +101,8 @@ public class Sistema {
         this.listaProcesos.add(p);
         p.setId((byte) listaProcesos.size());
     }
-    
-        public void agregarPrograma(Programa p) {
+
+    public void agregarPrograma(Programa p) {
         this.listaProgramas.add(p);
         p.setId((byte) listaProgramas.size());
     }
@@ -196,8 +200,6 @@ public class Sistema {
     public static ArrayList<Programa> getListaProgramas() {
         return listaProgramas;
     }
-    
-    
 
     public void imprimirProgramas() {
         for (int i = 0; i < getListaProgramas().size(); i++) {
