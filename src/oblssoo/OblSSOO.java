@@ -32,15 +32,15 @@ public class OblSSOO {
         s.agregarInstruccion(i3);
         s.agregarInstruccion(i4);
 
-        Proceso p1 = new Proceso("AABBCD");
-        Proceso p2 = new Proceso("BABDCC");
-        Proceso p3 = new Proceso("CDA");
-        Proceso p4 = new Proceso("ABCDDB");
+        Programa p1 = new Programa("AABBCD");
+        Programa p2 = new Programa("BABDCC");
+        Programa p3 = new Programa("CDA");
+        Programa p4 = new Programa("ABCDDB");
 
-        s.agregarProceso(p1);
-        s.agregarProceso(p2);
-        s.agregarProceso(p3);
-        s.agregarProceso(p4);
+        s.agregarPrograma(p1);
+        s.agregarPrograma(p2);
+        s.agregarPrograma(p3);
+        s.agregarPrograma(p4);
     }
 
     public static void menuLoggeo() {
@@ -54,17 +54,18 @@ public class OblSSOO {
     }
 
     public static void menuProcesos() {
-        s.imprimirProcesos();
-        System.out.println("Ingrese cuantos procesos correra");
+        s.imprimirProgramas();
+        System.out.println("Ingrese cuantos programas correra");
         byte l = in.nextByte();
-        System.out.println("Ingrese la id de los procesos");
+        System.out.println("Ingrese la id de los programas");
         Proceso[] a = new Proceso[l];
         for (int i = 0; i < l; i++) {
             byte id = in.nextByte();
-            Proceso p = s.getProcesoByID(id);
-            a[i] = p;
-            s.encolar(p);
-            System.out.println(p.toString() + " esta en la posicion1"
+            Programa p = s.getProgramaByID(id);
+            Proceso proc = new Proceso(p);
+            a[i] = proc;
+            s.encolar(proc);
+            System.out.println(proc.toString() + " esta en la posicion"
                     + " " + (i + 1) + " en la cola de ejecucion");
         }
         System.out.println("Cola de ejecucion: ");

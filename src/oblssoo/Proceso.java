@@ -8,20 +8,24 @@ import java.util.Queue;
 public class Proceso {
 
     private byte id;
+    private Programa instancia;
     private Queue<Instruccion> colaInst;
     private byte estado;
     private Duration tRequeridoInst;
     private Duration tiempoInst;
     private String instrucciones;
+    private int pos;
     //private Duration tiempoRequerido;
 
-    public Proceso(String s) {
+    public Proceso(Programa instancia) {
         this.estado = 0; //1-> listo // 2->enEjecucion // 3->Bloqueado;
         this.tiempoInst = ZERO;
-        this.instrucciones = s;
+        this.instancia = instancia;
+        this.instrucciones = instancia.getInstrucciones();
         this.colaInst = new LinkedList<>();
-        encolarInstrucciones(s);
-        this.tRequeridoInst = Sistema.getInstByID(s.charAt(0)).getTiempoCPU();
+        encolarInstrucciones(instrucciones);
+        this.tRequeridoInst = Sistema.getInstByID(instrucciones.charAt(0)).getTiempoCPU();
+        this.pos = 0;
         //this.tiempoRequerido = calcularTiempoRequerido();
     }
 
@@ -100,6 +104,7 @@ public class Proceso {
     public void despacharInstr() {
         //System.out.println("Se completó: "+ this.colaInst.element().toString());
         this.colaInst.remove();
+        this.pos++;
         if (getCantI() > 0) {
             this.tiempoInst = this.colaInst.element().getTiempoCPU();
             this.tRequeridoInst = this.colaInst.element().getTiempoCPU();
@@ -124,7 +129,15 @@ public class Proceso {
 
     @Override
     public String toString() {
-        return ("Proceso " + this.getId()) + " | Instrucciones: " + getInstrucciones();
+        return ("Proceso " + this.getId()) + " | Instancia de: " + instancia.toString();
+    }
+
+    public Programa getInstancia() {
+        return instancia;
+    }
+
+    public int getPos() {
+        return pos;
     }
 
     public boolean equals(Proceso u) {
