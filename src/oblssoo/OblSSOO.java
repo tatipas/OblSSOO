@@ -26,7 +26,7 @@ public class OblSSOO {
 
         Programa p1 = new Programa("AABBCD");
         Programa p2 = new Programa("BABDCC");
-        Programa p3 = new Programa("CDA");
+        Programa p3 = new Programa("AJKLMB");
         Programa p4 = new Programa("ABCDDB");
 
         s.agregarPrograma(p1);
@@ -56,11 +56,21 @@ public class OblSSOO {
         for (int i = 0; i < l; i++) {
             byte id = in.nextByte();
             Programa p = s.getProgramaByID(id);
-            Proceso proc = new Proceso(p);
-            a[i] = proc;
-            s.encolar(proc);
-            System.out.println(proc.toString() + " esta en la posicion"
-                    + " " + (i + 1) + " en la cola de ejecucion");
+            if (puedeCorrerProceso(s, s.getEnSesion(), p)) {
+                Proceso proc = new Proceso(p);
+                a[i] = proc;
+                s.encolar(proc);
+                System.out.println(proc.toString() + " esta en la posicion"
+                        + " " + (i + 1) + " en la cola de ejecucion");
+            } else {
+                id = pedirOtroId();
+                Proceso proc = new Proceso(p);
+                a[i] = proc;
+                s.encolar(proc);
+                System.out.println(proc.toString() + " esta en la posicion"
+                        + " " + (i + 1) + " en la cola de ejecucion");
+            }
+
         }
         System.out.println("Cola de ejecucion: ");
         for (int i = 0; i < l; i++) {
@@ -68,6 +78,28 @@ public class OblSSOO {
         }
 
         System.out.println("------------------------------------------------------");
+    }
+
+    public static byte pedirOtroId() {
+        System.out.println("El usuario " + s.getEnSesion() + " no tiene los permisos para correr el programa ingresado. Seleccione otro.");
+        byte id = in.nextByte();
+        Programa p = s.getProgramaByID(id);
+        if (puedeCorrerProceso(s, s.getEnSesion(), p)) {
+            return id;
+        } else {
+            return pedirOtroId();
+        }
+    }
+
+    public static boolean puedeCorrerProceso(Sistema s, Usuario u, Programa p) {
+        Instruccion a;
+        for (int i = 0; i < p.getInstrucciones().length(); i++) {
+            a = s.getInstByID(p.getInstrucciones().charAt(i));
+            if (!s.tienePermiso(u, a.getRecurso())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void iniciarEjecucion() throws InterruptedException {
@@ -109,7 +141,7 @@ public class OblSSOO {
         s.agregarInstruccion(i1);
         Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, cpu, "Calculo Numerico");
         s.agregarInstruccion(i2);
-        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 4, cpu, "Calculo Numerico" );
+        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 4, cpu, "Calculo Numerico");
         s.agregarInstruccion(i3);
         cpu.setInstrucciones(i1, i2, i3);
 
@@ -118,11 +150,11 @@ public class OblSSOO {
     public static void crearRSR(String nombre) {
         RSR r = new RSR(nombre);
         s.agregarRecurso(r);
-        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 2,r, "Pedir "+r.getNombre());
+        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 2, r, "Pedir " + r.getNombre());
         s.agregarInstruccion(i1);
-        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar "+r.getNombre());
+        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar " + r.getNombre());
         s.agregarInstruccion(i2);
-        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 4, r, "Devolver "+r.getNombre());
+        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 4, r, "Devolver " + r.getNombre());
         s.agregarInstruccion(i3);
 
         r.setInstrucciones(i1, i2, i3);
@@ -131,7 +163,7 @@ public class OblSSOO {
     public static void crearRCompartido(String nombre) {
         RCompartido r = new RCompartido(nombre);
         s.agregarRecurso(r);
-        Instruccion i = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 2, r, "Usar "+r.getNombre());
+        Instruccion i = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 2, r, "Usar " + r.getNombre());
         s.agregarInstruccion(i);
         r.setInstruccion(i);
     }
@@ -139,14 +171,14 @@ public class OblSSOO {
     public static void imprimirRecursos() {
         System.out.println("Recursos:");
         for (Recurso recurso : s.getListaRecursos()) {
-            System.out.println("........."+recurso.toString());
+            System.out.println("........." + recurso.toString());
         }
     }
-    
-        public static void imprimirInstrucciones() {
+
+    public static void imprimirInstrucciones() {
         System.out.println("Instrucciones:");
         for (Instruccion i : s.getListaInstrucciones()) {
-            System.out.println("........."+i.toString());
+            System.out.println("........." + i.toString());
         }
     }
 }

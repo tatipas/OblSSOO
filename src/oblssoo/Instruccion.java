@@ -20,7 +20,11 @@ public class Instruccion {
     public void setRecurso(Recurso r){
         this.recurso = r;
     }
-
+    
+    public Recurso getRecurso(){
+        return this.recurso;
+    }
+    
     public char getId() {
         return id;
     }

@@ -3,7 +3,7 @@ package oblssoo;
 public class Recurso {
 
     private String nombre;
-    private byte id;
+    private int id;
     private byte tipo;
 
     public boolean isCPU() {
@@ -30,11 +30,11 @@ public class Recurso {
         this.nombre = nombre;
     }
 
-    public byte getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(byte id) {
+    public void setId(int id) {
         this.id = id;
     }
 

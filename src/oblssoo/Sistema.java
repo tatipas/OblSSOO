@@ -20,6 +20,7 @@ public class Sistema {
     private Usuario enSesion;
     private Duration quantum;
     private Duration tiempoEjec;
+    private boolean[][] permisos;
 
     public Sistema(long q) {
         this.listaProcesos = new ArrayList<>();
@@ -33,8 +34,26 @@ public class Sistema {
         this.enSesion = null;
         this.quantum = Duration.of(q, SECONDS);
         this.tiempoEjec = ZERO;
+        this.permisos = new boolean[6][6];//6 para acceder directo con el id de los recursos/ usuarios
+        this.permisos[1] = new boolean[] {false,true,true,true,true,true};
+        this.permisos[2] = new boolean[] {false,true,false,false,true,true};
+        this.permisos[3] = new boolean[] {false,false,true,false,true,false};
+        this.permisos[4] = new boolean[] {false,false,false,true,true,true};
+        this.permisos[5] = new boolean[] {false,true,false,false,true,true};
     }
-
+    
+    public boolean tienePermiso(Usuario u, Recurso r){
+        return permisos[u.getId()][r.getId()];
+    }
+    
+    public void darPermiso(Usuario u, Recurso r) {
+        permisos[u.getId()][r.getId()]=true;
+    }
+    
+    public void quitarPermiso(Usuario u, Recurso r) {
+        permisos[u.getId()][r.getId()]=false;
+    }
+    
     public Duration getQuantum() {
         return quantum;
     }
@@ -64,7 +83,7 @@ public class Sistema {
 
     public void agregarRecurso(Recurso p) {
         this.getListaRecursos().add(p);
-        p.setId((byte) listaRecursos.size());
+        p.setId(listaRecursos.size());
     }
 
     public Usuario getEnSesion() {
@@ -113,7 +132,7 @@ public class Sistema {
 
     public void agregarUsuario(Usuario p) {
         this.listaUsuarios.add(p);
-        p.setId((byte) listaUsuarios.size());
+        p.setId(listaUsuarios.size());
     }
 
     public void bloquear(Proceso p) {
