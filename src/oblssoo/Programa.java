@@ -31,7 +31,7 @@ public class Programa {
 
     @Override
     public String toString() {
-        String s = "Programa: " + id + " | Instrucciones: " + this.instrucciones;
+        String s = "Programa: " + id ;
         return s;
     }
 

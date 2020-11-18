@@ -16,15 +16,15 @@ public class Instruccion {
         this.recurso = r;
         this.descr = s;
     }
-    
-    public void setRecurso(Recurso r){
+
+    public void setRecurso(Recurso r) {
         this.recurso = r;
     }
-    
-    public Recurso getRecurso(){
+
+    public Recurso getRecurso() {
         return this.recurso;
     }
-    
+
     public char getId() {
         return id;
     }
@@ -41,16 +41,32 @@ public class Instruccion {
         this.tiempoCPU = Duration.of(tiempoCPU, SECONDS);
     }
 
-    public boolean equals(Instruccion u){
+    public boolean equals(Instruccion u) {
         return getId() == u.getId();
     }
-    
-    public String getDescripcion(){
+
+    public String getDescripcion() {
         return descr;
     }
-    
+
+    public boolean esPedir() {
+        if (!recurso.esRSR()) {
+            return false;
+        }
+        RSR rec = (RSR) this.recurso;
+        return this.equals(rec.getPedir());
+    }
+
+    public boolean esDevolver() {
+        if (!recurso.esRSR()) {
+            return false;
+        }
+        RSR rec = (RSR) this.recurso;
+        return this.equals(rec.getDevolver());
+    }
+
     @Override
-    public String toString(){
-        return "Intruccion "+getId()+":" + getDescripcion();
+    public String toString() {
+        return "Intruccion " + getId() + ":" + getDescripcion();
     }
 }

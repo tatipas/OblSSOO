@@ -35,25 +35,25 @@ public class Sistema {
         this.quantum = Duration.of(q, SECONDS);
         this.tiempoEjec = ZERO;
         this.permisos = new boolean[6][6];//6 para acceder directo con el id de los recursos/ usuarios
-        this.permisos[1] = new boolean[] {false,true,true,true,true,true};
-        this.permisos[2] = new boolean[] {false,true,false,false,true,true};
-        this.permisos[3] = new boolean[] {false,false,true,false,true,false};
-        this.permisos[4] = new boolean[] {false,false,false,true,true,true};
-        this.permisos[5] = new boolean[] {false,true,false,false,true,true};
+        this.permisos[1] = new boolean[]{false, true, true, true, true, true};
+        this.permisos[2] = new boolean[]{false, true, false, false, true, true};
+        this.permisos[3] = new boolean[]{false, true, true, false, true, false};
+        this.permisos[4] = new boolean[]{false, true, false, true, true, true};
+        this.permisos[5] = new boolean[]{false, true, false, false, true, true};
     }
-    
-    public boolean tienePermiso(Usuario u, Recurso r){
+
+    public boolean tienePermiso(Usuario u, Recurso r) {
         return permisos[u.getId()][r.getId()];
     }
-    
+
     public void darPermiso(Usuario u, Recurso r) {
-        permisos[u.getId()][r.getId()]=true;
+        permisos[u.getId()][r.getId()] = true;
     }
-    
+
     public void quitarPermiso(Usuario u, Recurso r) {
-        permisos[u.getId()][r.getId()]=false;
+        permisos[u.getId()][r.getId()] = false;
     }
-    
+
     public Duration getQuantum() {
         return quantum;
     }
@@ -72,9 +72,9 @@ public class Sistema {
 
     public void setEnEjecucion() {
         this.enEjecucion = colaDeEjecucion.element();
-        colaDeEjecucion.element().setEstadoEnEjecucion();
+        if(!enEjecucion.estaBloqueado()){
         System.out.println(enEjecucion.toString() + " ha tomado el procesador");
-
+        }
     }
 
     public static ArrayList<Recurso> getListaRecursos() {
@@ -96,11 +96,17 @@ public class Sistema {
 
     public void encolar(Proceso p) {
         this.colaDeEjecucion.add(p);
-        p.setId((byte) colaDeEjecucion.size());
+        if (p.getId() == 0) {
+            p.setId((byte) colaDeEjecucion.size());
+        }
+    }
+
+    public void despacharProceso() {
+        System.out.println(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
+        desencolar();
     }
 
     public void desencolar() {
-        System.out.println(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
         this.colaDeEjecucion.remove();
         if (getCantCola() != 0) {
             setEnEjecucion();
@@ -135,14 +141,53 @@ public class Sistema {
         p.setId(listaUsuarios.size());
     }
 
-    public void bloquear(Proceso p) {
+    public void bloquearProceso() {
+        Proceso p = enEjecucion;
         p.setEstadoBloqueado();
-        this.desencolar();
-        this.encolar(p);
+        listaBloqueados.add(p);
+            this.desencolar();
     }
 
     public void siguienteInstante() throws InterruptedException {
+        Instruccion i = enEjecucion.getInstEnEjecucion();
+        System.out.println("..........En ejecución: " + enEjecucion.getInstEnEjecucion().toString() + " en la posicion: " + enEjecucion.getPos());
 
+        if (i.esPedir()) {
+
+            RSR rec = (RSR) i.getRecurso();
+            rec.encolar(enEjecucion);
+
+            if (!rec.getAtendido().equals(enEjecucion)) {
+                enEjecucion.despacharInstr();
+                bloquearProceso();
+                return;
+            }
+        } else {
+            if (i.esDevolver()) {
+                RSR rec = (RSR) i.getRecurso();
+                System.out.println(enEjecucion.toString() + " devolvio el " + rec.getNombre());
+                rec.desencolar();
+                if(!rec.colaVacia()){
+                desbloquear(rec.getAtendido());
+            }}
+        }
+        //Thread.sleep(1000);
+        agregarTiempoEjec(1);
+        enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
+        if (enEjecucion.getCantI() == 0) {
+            despacharProceso();
+
+        } else {
+            if (tiempoEjec.equals(quantum)) {
+                timeout();
+                tiempoEjec = ZERO;
+                System.out.println("El " + getEnEjecucion().toString() + " tomo el procesador por Timeout");
+            }
+        }
+
+    }
+
+    /*
         if (enEjecucion.getTiempoInst().equals(enEjecucion.gettRequeridoInst())) {
             System.out.println("En ejecución: " + enEjecucion.getInstEnEjecucion().toString() + " en la posicion: " + enEjecucion.getPos());
         }
@@ -159,8 +204,7 @@ public class Sistema {
                 System.out.println("El " + getEnEjecucion().toString() + " tomo el procesador por Timeout");
             }
         }
-    }
-
+     */
     public void agregarTiempoEjec(int t) {
         tiempoEjec = tiempoEjec.plusSeconds(1);
     }
@@ -222,7 +266,8 @@ public class Sistema {
 
     public void imprimirProgramas() {
         for (int i = 0; i < getListaProgramas().size(); i++) {
-            System.out.println(getListaProgramas().get(i).toString());
+            Programa p = getListaProgramas().get(i);
+            System.out.println(p.toString() + "| Intrucciones: " + p.getInstrucciones());
         }
     }
 
@@ -230,6 +275,12 @@ public class Sistema {
         for (int i = 0; i < getListaUsuarios().size(); i++) {
             System.out.println(getListaUsuarios().get(i).toString());
         }
+    }
+
+    private void desbloquear(Proceso p) {
+        p.setEstadoListo();
+        listaBloqueados.remove(p);
+        encolar(p);
     }
 
 }

@@ -6,19 +6,19 @@ public class Recurso {
     private int id;
     private byte tipo;
 
-    public boolean isCPU() {
+    public boolean esCPU() {
         return tipo == 0;
     }
 
-    public boolean isRSR() {
+    public boolean esRSR() {
         return tipo == 1;
     }
 
-    public boolean isOneTime() {
+    public boolean esOneTime() {
         return tipo == 2;
     }
 
-    public boolean isRComp() {
+    public boolean esRComp() {
         return tipo == 3;
     }
 

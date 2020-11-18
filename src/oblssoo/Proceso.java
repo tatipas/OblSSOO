@@ -20,18 +20,20 @@ public class Proceso {
     public Proceso(Programa instancia) {
         this.estado = 0; //1-> listo // 2->enEjecucion // 3->Bloqueado;
         this.tiempoInst = ZERO;
+        this.estado = 1;
         this.instancia = instancia;
         this.instrucciones = instancia.getInstrucciones();
         this.colaInst = new LinkedList<>();
         encolarInstrucciones(instrucciones);
         this.tRequeridoInst = Sistema.getInstByID(instrucciones.charAt(0)).getTiempoCPU();
         this.pos = 0;
+        this.id = 0;
     }
 
-    public Duration calcularTiempoRequerido(){
-        Duration res=ZERO;
+    public Duration calcularTiempoRequerido() {
+        Duration res = ZERO;
         for (int i = 0; i < instrucciones.length(); i++) {
-            res= res.plus(Sistema.getInstByID(instrucciones.charAt(i)).getTiempoCPU());
+            res = res.plus(Sistema.getInstByID(instrucciones.charAt(i)).getTiempoCPU());
         }
         return res;
     }
@@ -74,6 +76,7 @@ public class Proceso {
 
     public void setEstadoBloqueado() {
         this.estado = 3;
+        System.out.println("Se bloqueo " + this.toString());
     }
 
     public void encolarInstr(Instruccion i) {
@@ -95,7 +98,7 @@ public class Proceso {
     public int getCantI() {
         return colaInst.size();
     }
-    
+
     public void despacharInstr() {
         //System.out.println("Se completó: "+ this.colaInst.element().toString());
         this.colaInst.remove();
@@ -145,11 +148,15 @@ public class Proceso {
         }
     }
 
-    public Instruccion getInstEnEjecucion(){
+    public Instruccion getInstEnEjecucion() {
         return colaInst.element();
     }
-    
-    public boolean estaListo(){
+
+    public boolean estaListo() {
         return getEstado() == 1;
+    }
+
+    public boolean estaBloqueado() {
+        return getEstado() == 3;
     }
 }

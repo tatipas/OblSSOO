@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class OblSSOO {
 
-    public static Sistema s = new Sistema(10);
+    public static Sistema s = new Sistema(5);
     public static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) throws InterruptedException {
@@ -24,10 +24,10 @@ public class OblSSOO {
         crearUsuarios(); //Crea y agrega 5 usuarios
         crearRecursos(); //Crea y agrega 5 recursos y la CPU con sus instrucciones
 
-        Programa p1 = new Programa("AABBCD");
-        Programa p2 = new Programa("BABDCC");
-        Programa p3 = new Programa("AJKLMB");
-        Programa p4 = new Programa("ABCDDB");
+        Programa p1 = new Programa("ADCFJKLM");
+        Programa p2 = new Programa("BABDEFAAM");
+        Programa p3 = new Programa("DBAGEHFIBA");
+        Programa p4 = new Programa("GADHFIBCDDB");
 
         s.agregarPrograma(p1);
         s.agregarPrograma(p2);
@@ -56,7 +56,7 @@ public class OblSSOO {
         for (int i = 0; i < l; i++) {
             byte id = in.nextByte();
             Programa p = s.getProgramaByID(id);
-            if (puedeCorrerProceso(s, s.getEnSesion(), p)) {
+            if (puedeCorrerProceso(s.getEnSesion(), p)) {
                 Proceso proc = new Proceso(p);
                 a[i] = proc;
                 s.encolar(proc);
@@ -84,14 +84,14 @@ public class OblSSOO {
         System.out.println("El usuario " + s.getEnSesion() + " no tiene los permisos para correr el programa ingresado. Seleccione otro.");
         byte id = in.nextByte();
         Programa p = s.getProgramaByID(id);
-        if (puedeCorrerProceso(s, s.getEnSesion(), p)) {
+        if (puedeCorrerProceso(s.getEnSesion(), p)) {
             return id;
         } else {
             return pedirOtroId();
         }
     }
 
-    public static boolean puedeCorrerProceso(Sistema s, Usuario u, Programa p) {
+    public static boolean puedeCorrerProceso(Usuario u, Programa p) {
         Instruccion a;
         for (int i = 0; i < p.getInstrucciones().length(); i++) {
             a = s.getInstByID(p.getInstrucciones().charAt(i));
@@ -107,7 +107,9 @@ public class OblSSOO {
 
         while (s.getCantCola() != 0) {
             s.siguienteInstante();
-
+        }
+        if(s.getListaBloqueados().size() > 0){
+            System.out.println("DEADLOCK");
         }
     }
 
@@ -150,11 +152,11 @@ public class OblSSOO {
     public static void crearRSR(String nombre) {
         RSR r = new RSR(nombre);
         s.agregarRecurso(r);
-        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 2, r, "Pedir " + r.getNombre());
+        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Pedir "+ r.getNombre());
         s.agregarInstruccion(i1);
-        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar " + r.getNombre());
+        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar "+ r.getNombre());
         s.agregarInstruccion(i2);
-        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 4, r, "Devolver " + r.getNombre());
+        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Devolver "+ r.getNombre());
         s.agregarInstruccion(i3);
 
         r.setInstrucciones(i1, i2, i3);
