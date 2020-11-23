@@ -72,8 +72,8 @@ public class Sistema {
 
     public void setEnEjecucion() {
         this.enEjecucion = colaDeEjecucion.element();
-        if(!enEjecucion.estaBloqueado()){
-        System.out.println(enEjecucion.toString() + " ha tomado el procesador");
+        if (!enEjecucion.estaBloqueado()) {
+            System.out.println(enEjecucion.toString() + " ha tomado el procesador");
         }
     }
 
@@ -145,15 +145,14 @@ public class Sistema {
         Proceso p = enEjecucion;
         p.setEstadoBloqueado();
         listaBloqueados.add(p);
-            this.desencolar();
+        this.desencolar();
     }
 
     public void siguienteInstante() throws InterruptedException {
         Instruccion i = enEjecucion.getInstEnEjecucion();
-        System.out.println("..........En ejecución: " + enEjecucion.getInstEnEjecucion().toString() + " en la posicion: " + enEjecucion.getPos());
+        System.out.println("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
 
         if (i.esPedir()) {
-
             RSR rec = (RSR) i.getRecurso();
             rec.encolar(enEjecucion);
 
@@ -167,11 +166,12 @@ public class Sistema {
                 RSR rec = (RSR) i.getRecurso();
                 System.out.println(enEjecucion.toString() + " devolvio el " + rec.getNombre());
                 rec.desencolar();
-                if(!rec.colaVacia()){
-                desbloquear(rec.getAtendido());
-            }}
+                if (!rec.colaVacia()) {
+                    desbloquear(rec.getAtendido());
+                }
+            }
         }
-        //Thread.sleep(1000);
+      //  Thread.sleep(1000);
         agregarTiempoEjec(1);
         enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
         if (enEjecucion.getCantI() == 0) {
@@ -184,7 +184,6 @@ public class Sistema {
                 System.out.println("El " + getEnEjecucion().toString() + " tomo el procesador por Timeout");
             }
         }
-
     }
 
     /*
