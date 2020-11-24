@@ -35,6 +35,7 @@ public class Sistema {
         this.quantum = Duration.of(q, SECONDS);
         this.tiempoEjec = ZERO;
         this.permisos = new boolean[6][6];//6 para acceder directo con el id de los recursos/ usuarios
+        initialize();
         this.permisos[1] = new boolean[]{false, true, true, true, true, true, true};
         this.permisos[2] = new boolean[]{false, true, true, false, false, true, true};
         this.permisos[3] = new boolean[]{false, true, true, true, false, true, false};
@@ -105,7 +106,7 @@ public class Sistema {
         getMemoria().quitarDeMemoria(enEjecucion);
         desencolar();
         getMemoria().imprimirMemoria();
-       getMemoria().addQueuedProcesos(this);
+        getMemoria().addQueuedProcesos(this);
     }
 
     public void desencolar() {
@@ -292,4 +293,107 @@ public class Sistema {
         return (Memoria) listaRecursos.get(1);
     }
 
+    public void initialize() {
+        crearUsuarios(); //Crea y agrega 5 usuarios
+        crearRecursos(); //Crea y agrega 5 recursos y la CPU con sus instrucciones
+
+        Programa p1 = new Programa("ADCFJKLM");
+        Programa p2 = new Programa("BABDEFAAM");
+        Programa p3 = new Programa("DBAGEHFIBA");
+        Programa p4 = new Programa("GADHFIBCDDB");
+
+        agregarPrograma(p1);
+        agregarPrograma(p2);
+        agregarPrograma(p3);
+        agregarPrograma(p4);
+    }
+
+    public void crearUsuarios() {
+        Usuario u1 = new Usuario();
+        Usuario u2 = new Usuario();
+        Usuario u3 = new Usuario();
+        Usuario u4 = new Usuario();
+        Usuario u5 = new Usuario();
+
+        agregarUsuario(u1);
+        agregarUsuario(u2);
+        agregarUsuario(u3);
+        agregarUsuario(u4);
+        agregarUsuario(u5);
+    }
+
+    public void crearRecursos() {
+        crearCPU();
+        crearMemoria(30);
+        crearRSR("Impresora 1");
+        crearRSR("Impresora 2");
+        crearRSR("Variable Global");
+        crearRCompartido("Red Wifi");
+
+    }
+
+    public void crearCPU() {
+        CPU cpu = new CPU();
+        agregarRecurso(cpu);
+        Instruccion i1 = new Instruccion((char) (65 + getListaInstrucciones().size()), 2, cpu, "Calculo Numerico");
+        agregarInstruccion(i1);
+        Instruccion i2 = new Instruccion((char) (65 + getListaInstrucciones().size()), 3, cpu, "Calculo Numerico");
+        agregarInstruccion(i2);
+        Instruccion i3 = new Instruccion((char) (65 + getListaInstrucciones().size()), 4, cpu, "Calculo Numerico");
+        agregarInstruccion(i3);
+        cpu.setInstrucciones(i1, i2, i3);
+
+    }
+
+    public void crearRSR(String nombre) {
+        RSR r = new RSR(nombre);
+        agregarRecurso(r);
+        Instruccion i1 = new Instruccion((char) (65 + getListaInstrucciones().size()), 1, r, "Pedir " + r.getNombre());
+        agregarInstruccion(i1);
+        Instruccion i2 = new Instruccion((char) (65 + getListaInstrucciones().size()), 3, r, "Usar " + r.getNombre());
+        agregarInstruccion(i2);
+        Instruccion i3 = new Instruccion((char) (65 + getListaInstrucciones().size()), 1, r, "Devolver " + r.getNombre());
+        agregarInstruccion(i3);
+
+        r.setInstrucciones(i1, i2, i3);
+    }
+
+    public void crearRCompartido(String nombre) {
+        RCompartido r = new RCompartido(nombre);
+        agregarRecurso(r);
+        Instruccion i = new Instruccion((char) (65 + getListaInstrucciones().size()), 2, r, "Usar " + r.getNombre());
+        agregarInstruccion(i);
+        r.setInstruccion(i);
+    }
+
+    public static void imprimirRecursos() {
+        System.out.println("Recursos:");
+        for (Recurso recurso : getListaRecursos()) {
+            System.out.println("........." + recurso.toString());
+        }
+    }
+
+    public static void imprimirInstrucciones() {
+        System.out.println("Instrucciones:");
+        for (Instruccion i : getListaInstrucciones()) {
+            System.out.println("........." + i.toString());
+        }
+    }
+
+    private void crearMemoria(int i) {
+        Memoria m = new Memoria(i);
+        agregarRecurso(m);
+    }
+
+    
+        public boolean puedeCorrerProceso(Programa p) {
+        Instruccion a;
+        for (int i = 0; i < p.getInstrucciones().length(); i++) {
+            a = getInstByID(p.getInstrucciones().charAt(i));
+            if (!tienePermiso(getEnSesion(), a.getRecurso())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -9,6 +9,7 @@ public class Memoria extends Recurso {
     private int espacioLibre;
 
     public Memoria(int d) {
+        this.setNombre("Memoria");
         this.array = new boolean[d];
         this.cola = new ArrayList<>();
         this.espacioLibre = d;
