@@ -10,7 +10,7 @@ public class RSR extends Recurso {
 
     public RSR(String nombre) {
         this.setNombre(nombre);
-        this.setTipo((byte) 1);
+        this.setTipo((byte) 3);
         this.colaDeEspera = new LinkedList<>();
         instrucciones = new Instruccion[3];
 
@@ -38,14 +38,14 @@ public class RSR extends Recurso {
     public void encolar(Proceso p) {
         this.colaDeEspera.add(p);
         if (getAtendido().equals(p)) {
-            System.out.println(p.toString() + "tomo" + this.getNombre());
+            System.out.println(p.toString() + "tomo " + this.getNombre());
         }
     }
 
     public void desencolar() {
         this.colaDeEspera.remove();
         if (colaDeEspera.size() > 0) {
-            System.out.println(getAtendido() + "tomo" + this.getNombre());
+            System.out.println(getAtendido() + "tomo " + this.getNombre());
         }
     }
     

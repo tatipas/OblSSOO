@@ -13,14 +13,16 @@ public class Sistema {
     private static ArrayList<Programa> listaProgramas;
     private static ArrayList<Instruccion> listaInstrucciones;
     private static ArrayList<Recurso> listaRecursos;
-    private ArrayList<Usuario> listaUsuarios;
-    private ArrayList<Proceso> listaBloqueados;
+    private static ArrayList<Usuario> listaUsuarios;
+    private static ArrayList<Proceso> listaBloqueados;
     private static Queue<Proceso> colaDeEjecucion;
     private Proceso enEjecucion;
-    private Usuario enSesion;
+    private static Usuario enSesion;
     private Duration quantum;
     private Duration tiempoEjec;
-    private boolean[][] permisos;
+    private static boolean[][] permisos;
+    private CPU cpu;
+    private Memoria memoria;
 
     public Sistema(long q) {
         this.listaProcesos = new ArrayList<>();
@@ -36,11 +38,11 @@ public class Sistema {
         this.tiempoEjec = ZERO;
         this.permisos = new boolean[6][6];//6 para acceder directo con el id de los recursos/ usuarios
         initialize();
-        this.permisos[1] = new boolean[]{false, true, true, true, true, true, true};
-        this.permisos[2] = new boolean[]{false, true, true, false, false, true, true};
-        this.permisos[3] = new boolean[]{false, true, true, true, false, true, false};
-        this.permisos[4] = new boolean[]{false, true, true, false, true, true, true};
-        this.permisos[5] = new boolean[]{false, true, true, false, false, true, true};
+        this.permisos[1] = new boolean[]{false, true, true, true, true};
+        this.permisos[2] = new boolean[]{false, false, true, true, true};
+        this.permisos[3] = new boolean[]{false, true, false, true, true};
+        this.permisos[4] = new boolean[]{false, true, true, false, true};
+        this.permisos[5] = new boolean[]{false, true, true, true, false};
     }
 
     public boolean tienePermiso(Usuario u, Recurso r) {
@@ -228,7 +230,7 @@ public class Sistema {
         return listaUsuarios;
     }
 
-    public ArrayList<Proceso> getListaBloqueados() {
+    public static ArrayList<Proceso> getListaBloqueados() {
         return listaBloqueados;
     }
 
@@ -290,7 +292,7 @@ public class Sistema {
     }
 
     public Memoria getMemoria() {
-        return (Memoria) listaRecursos.get(1);
+        return this.memoria;
     }
 
     public void initialize() {
@@ -334,7 +336,7 @@ public class Sistema {
 
     public void crearCPU() {
         CPU cpu = new CPU();
-        agregarRecurso(cpu);
+        setCPU(cpu);
         Instruccion i1 = new Instruccion((char) (65 + getListaInstrucciones().size()), 2, cpu, "Calculo Numerico");
         agregarInstruccion(i1);
         Instruccion i2 = new Instruccion((char) (65 + getListaInstrucciones().size()), 3, cpu, "Calculo Numerico");
@@ -380,20 +382,59 @@ public class Sistema {
         }
     }
 
-    private void crearMemoria(int i) {
-        Memoria m = new Memoria(i);
-        agregarRecurso(m);
+    public void setMemoria(Memoria memoria) {
+        this.memoria = memoria;
     }
 
-    
-        public boolean puedeCorrerProceso(Programa p) {
+    private void crearMemoria(int i) {
+        Memoria m = new Memoria(i);
+        setMemoria(m);
+    }
+
+    public boolean puedeCorrerProceso(Programa p) {
         Instruccion a;
         for (int i = 0; i < p.getInstrucciones().length(); i++) {
             a = getInstByID(p.getInstrucciones().charAt(i));
-            if (!tienePermiso(getEnSesion(), a.getRecurso())) {
-                return false;
+            if (!a.getRecurso().esCPU() && !a.getRecurso().esMemoria()) {
+                if (!tienePermiso(getEnSesion(), a.getRecurso())) {
+                    return false;
+                }
             }
         }
         return true;
     }
+
+    public CPU getCpu() {
+        return cpu;
+    }
+
+    public void setCPU(CPU cpu) {
+        this.cpu = cpu;
+    }
+
+    public static void limpiarSistema() {
+        getListaBloqueados().clear();
+        colaDeEjecucion.clear();
+    }
+
+    public static void imprimirPermisos() {
+        System.out.println("------------------------------------------------------");
+
+        if (enSesion.getId() == 1) {
+            for (Usuario u : listaUsuarios) {
+                System.out.println(u.toString());
+                for (Recurso r : listaRecursos) {
+                    System.out.println(r.toString() + ": " + permisos[u.getId()][r.getId()]);
+                }
+            }
+        } else {
+            System.out.println(enSesion.toString());
+            for (Recurso r : listaRecursos) {
+                System.out.println(r.toString() + ": " + permisos[enSesion.getId()][r.getId()]);
+            }
+        }
+        System.out.println("------------------------------------------------------");
+
+    }
+
 }

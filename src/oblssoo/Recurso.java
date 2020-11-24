@@ -10,12 +10,12 @@ public class Recurso {
         return tipo == 0;
     }
 
-    public boolean esRSR() {
-        return tipo == 1;
+    public boolean esMemoria() {
+        return tipo == 2;
     }
 
-    public boolean esOneTime() {
-        return tipo == 2;
+    public boolean esRSR() {
+        return tipo == 3;
     }
 
     public boolean esRComp() {

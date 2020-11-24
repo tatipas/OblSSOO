@@ -5,14 +5,17 @@ import java.util.ArrayList;
 public class Memoria extends Recurso {
 
     private boolean[] array;
+    private int capacidad;
     private ArrayList<Proceso> cola;
     private int espacioLibre;
 
     public Memoria(int d) {
         this.setNombre("Memoria");
-        this.array = new boolean[d];
+        this.capacidad = d;
+        this.array = new boolean[capacidad];
         this.cola = new ArrayList<>();
         this.espacioLibre = d;
+        this.setTipo((byte)2); 
     }
 
     public boolean addOrQueueProceso(Proceso p, Sistema s) { // si se carga en memoria, devuelve true, sino false.
@@ -92,5 +95,11 @@ public class Memoria extends Recurso {
         }
         r += "]";
         System.out.println(r);
+    }
+    
+    public void reset(){
+                this.array = new boolean[capacidad];
+        this.cola.clear();
+        this.espacioLibre = capacidad;
     }
 }
