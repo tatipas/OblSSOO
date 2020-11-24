@@ -32,7 +32,7 @@ public class Programa {
 
     @Override
     public String toString() {
-        String s = "Programa: " + id ;
+        String s = "Programa: " + id +" || " +instrucciones;
         return s;
     }
 

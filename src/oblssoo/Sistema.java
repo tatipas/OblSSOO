@@ -119,6 +119,10 @@ public class Sistema {
         this.tiempoEjec = ZERO;
     }
 
+    public static boolean[][] getPermisos() {
+        return permisos;
+    }
+
     public void timeout() {
         Proceso p = this.colaDeEjecucion.poll();
         this.colaDeEjecucion.add(p);

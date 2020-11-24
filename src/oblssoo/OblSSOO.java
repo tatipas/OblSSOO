@@ -7,12 +7,12 @@ public class OblSSOO {
     public static Sistema s = new Sistema(5);
     public static Scanner in = new Scanner(System.in);
 
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("-------------------C A F F A  O S---------------------");
-        menuLoggeo();
-        menuOpciones();
+   // public static void main(String[] args) throws InterruptedException {
+    //    System.out.println("-------------------C A F F A  O S---------------------");
+      //  menuLoggeo();
+        //menuOpciones();
 
-    }
+    //}
 
     public static void menuOpciones() throws InterruptedException {
         System.out.println("Seleccione una opcion:");
@@ -53,7 +53,6 @@ public class OblSSOO {
                 menuOpciones();
                 break;
         }
-
     }
 
     public static void menuLoggeo() {
@@ -100,7 +99,6 @@ public class OblSSOO {
                     System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
                 }
             }
-
         }
         System.out.println("Cola de ejecucion: ");
         for (Proceso p : s.getColaDeEjecucion()) {
