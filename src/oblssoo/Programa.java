@@ -11,6 +11,7 @@ public class Programa {
     private String instrucciones;
     private byte id;
     private ArrayList<Recurso> listaRecursos;
+    
 
     public Programa(String s) {
         this.instrucciones = s;
@@ -37,6 +38,10 @@ public class Programa {
 
     public boolean equals(Proceso u) {
         return getId() == u.getId();
+    }
+    
+    public int getPeso(){
+        return instrucciones.length();
     }
 
 }

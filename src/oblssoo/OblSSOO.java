@@ -49,6 +49,7 @@ public class OblSSOO {
         imprimirRecursos();
         imprimirInstrucciones();
         s.imprimirProgramas();
+        Memoria m = s.getMemoria();
         System.out.println("Ingrese cuantos programas correra");
         byte l = in.nextByte();
         System.out.println("Ingrese la id de los programas");
@@ -59,22 +60,30 @@ public class OblSSOO {
             if (puedeCorrerProceso(s.getEnSesion(), p)) {
                 Proceso proc = new Proceso(p);
                 a[i] = proc;
-                s.encolar(proc);
-                System.out.println(proc.toString() + " esta en la posicion"
-                        + " " + (i + 1) + " en la cola de ejecucion");
+                if (m.addOrQueueProceso(proc, s)) {
+                    System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
+                    m.imprimirMemoria();
+                } else {
+                    System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
+                }
+
             } else {
                 id = pedirOtroId();
                 Proceso proc = new Proceso(p);
                 a[i] = proc;
-                s.encolar(proc);
-                System.out.println(proc.toString() + " esta en la posicion"
-                        + " " + (i + 1) + " en la cola de ejecucion");
+                if (m.addOrQueueProceso(proc, s)) {
+                    System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
+                                        m.imprimirMemoria();
+
+                } else {
+                    System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
+                }
             }
 
         }
         System.out.println("Cola de ejecucion: ");
-        for (int i = 0; i < l; i++) {
-            System.out.println(a[i].toString());
+        for (Proceso p: s.getColaDeEjecucion()) {
+            System.out.println(p.toString());
         }
 
         System.out.println("------------------------------------------------------");
@@ -108,7 +117,7 @@ public class OblSSOO {
         while (s.getCantCola() != 0) {
             s.siguienteInstante();
         }
-        if(s.getListaBloqueados().size() > 0){
+        if (s.getListaBloqueados().size() > 0) {
             System.out.println("DEADLOCK");
         }
     }
@@ -129,6 +138,7 @@ public class OblSSOO {
 
     public static void crearRecursos() {
         crearCPU();
+        crearMemoria(30);
         crearRSR("Impresora 1");
         crearRSR("Impresora 2");
         crearRSR("Variable Global");
@@ -152,11 +162,11 @@ public class OblSSOO {
     public static void crearRSR(String nombre) {
         RSR r = new RSR(nombre);
         s.agregarRecurso(r);
-        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Pedir "+ r.getNombre());
+        Instruccion i1 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Pedir " + r.getNombre());
         s.agregarInstruccion(i1);
-        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar "+ r.getNombre());
+        Instruccion i2 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 3, r, "Usar " + r.getNombre());
         s.agregarInstruccion(i2);
-        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Devolver "+ r.getNombre());
+        Instruccion i3 = new Instruccion((char) (65 + s.getListaInstrucciones().size()), 1, r, "Devolver " + r.getNombre());
         s.agregarInstruccion(i3);
 
         r.setInstrucciones(i1, i2, i3);
@@ -182,5 +192,10 @@ public class OblSSOO {
         for (Instruccion i : s.getListaInstrucciones()) {
             System.out.println("........." + i.toString());
         }
+    }
+
+    private static void crearMemoria(int i) {
+        Memoria m = new Memoria(i);
+        s.agregarRecurso(m);
     }
 }

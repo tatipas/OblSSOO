@@ -15,6 +15,7 @@ public class Proceso {
     private Duration tiempoInst;
     private String instrucciones;
     private int pos;
+    private Queue<Integer> memoriaOcupada;
     //private Duration tiempoRequerido;
 
     public Proceso(Programa instancia) {
@@ -24,6 +25,7 @@ public class Proceso {
         this.instancia = instancia;
         this.instrucciones = instancia.getInstrucciones();
         this.colaInst = new LinkedList<>();
+        this.memoriaOcupada =  new LinkedList<>();
         encolarInstrucciones(instrucciones);
         this.tRequeridoInst = Sistema.getInstByID(instrucciones.charAt(0)).getTiempoCPU();
         this.pos = 0;
@@ -158,5 +160,21 @@ public class Proceso {
 
     public boolean estaBloqueado() {
         return getEstado() == 3;
+    }
+    
+    public int getPeso(){
+        return this.instancia.getPeso();
+    }
+    
+    public void addDir(int pos){
+        this.memoriaOcupada.add(pos);
+    }
+    
+    public int pollDir(){
+        return this.memoriaOcupada.poll();
+    }
+    
+    public boolean hayDir(){
+        return this.memoriaOcupada.size() > 0; 
     }
 }

@@ -35,11 +35,11 @@ public class Sistema {
         this.quantum = Duration.of(q, SECONDS);
         this.tiempoEjec = ZERO;
         this.permisos = new boolean[6][6];//6 para acceder directo con el id de los recursos/ usuarios
-        this.permisos[1] = new boolean[]{false, true, true, true, true, true};
-        this.permisos[2] = new boolean[]{false, true, false, false, true, true};
-        this.permisos[3] = new boolean[]{false, true, true, false, true, false};
-        this.permisos[4] = new boolean[]{false, true, false, true, true, true};
-        this.permisos[5] = new boolean[]{false, true, false, false, true, true};
+        this.permisos[1] = new boolean[]{false, true, true, true, true, true, true};
+        this.permisos[2] = new boolean[]{false, true, true, false, false, true, true};
+        this.permisos[3] = new boolean[]{false, true, true, true, false, true, false};
+        this.permisos[4] = new boolean[]{false, true, true, false, true, true, true};
+        this.permisos[5] = new boolean[]{false, true, true, false, false, true, true};
     }
 
     public boolean tienePermiso(Usuario u, Recurso r) {
@@ -96,14 +96,16 @@ public class Sistema {
 
     public void encolar(Proceso p) {
         this.colaDeEjecucion.add(p);
-        if (p.getId() == 0) {
-            p.setId((byte) colaDeEjecucion.size());
-        }
+        p.setEstadoListo();
+
     }
 
     public void despacharProceso() {
         System.out.println(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
+        getMemoria().quitarDeMemoria(enEjecucion);
         desencolar();
+        getMemoria().imprimirMemoria();
+       getMemoria().addQueuedProcesos(this);
     }
 
     public void desencolar() {
@@ -124,7 +126,9 @@ public class Sistema {
 
     public void agregarProceso(Proceso p) {
         this.listaProcesos.add(p);
-        p.setId((byte) listaProcesos.size());
+        if (p.getId() == 0) {
+            p.setId((byte) this.listaProcesos.size());
+        }
     }
 
     public void agregarPrograma(Programa p) {
@@ -143,9 +147,13 @@ public class Sistema {
 
     public void bloquearProceso() {
         Proceso p = enEjecucion;
+        agregarProcesoBloqueado(p);
+        this.desencolar();
+    }
+
+    public void agregarProcesoBloqueado(Proceso p) {
         p.setEstadoBloqueado();
         listaBloqueados.add(p);
-        this.desencolar();
     }
 
     public void siguienteInstante() throws InterruptedException {
@@ -171,12 +179,11 @@ public class Sistema {
                 }
             }
         }
-      //  Thread.sleep(1000);
+        //  Thread.sleep(1000);
         agregarTiempoEjec(1);
         enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
         if (enEjecucion.getCantI() == 0) {
             despacharProceso();
-
         } else {
             if (tiempoEjec.equals(quantum)) {
                 timeout();
@@ -276,10 +283,13 @@ public class Sistema {
         }
     }
 
-    private void desbloquear(Proceso p) {
-        p.setEstadoListo();
-        listaBloqueados.remove(p);
+    public void desbloquear(Proceso p) {
         encolar(p);
+        listaBloqueados.remove(p);
+    }
+
+    public Memoria getMemoria() {
+        return (Memoria) listaRecursos.get(1);
     }
 
 }
