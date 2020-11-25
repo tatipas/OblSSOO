@@ -19,7 +19,7 @@ public class Recurso {
     }
 
     public boolean esRComp() {
-        return tipo == 3;
+        return tipo == 4;
     }
 
     public String getNombre() {

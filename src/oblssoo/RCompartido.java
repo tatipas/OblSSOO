@@ -7,7 +7,7 @@ public class RCompartido extends Recurso {
 
     public RCompartido(String nombre) {
         this.setNombre(nombre);
-        this.setTipo((byte) 2);
+        this.setTipo((byte) 4);
     }
     
     public void setInstruccion(Instruccion i){
