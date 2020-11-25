@@ -457,6 +457,7 @@ public class Sistema {
 
     public static void limpiarSistema() {
         getListaBloqueados().clear();
+        getListaProcesos().clear();
         colaDeEjecucion.clear();
     }
 

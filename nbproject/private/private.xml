@@ -3,16 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/Proceso.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/Usuario.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/RSR.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/ui/main.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/RCompartido.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/Programa.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/Sistema.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/ui/ejecucion.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/ui/menuEjecucion.java</file>
-            <file>file:/C:/Users/Topo/Desktop/Mis%20Carpetas/ORT/Semestre%204/SSOO/OblSSOO/src/oblssoo/CPU.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/ui/main.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/Instruccion.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/ui/ejecucion.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/Proceso.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/CPU.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/Recurso.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/RCompartido.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/ui/menuEjecucion.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/Sistema.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/ui/mainMenu.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/Memoria.java</file>
+            <file>file:/C:/Users/Graziano/Documents/ORT/4to-Semestre/SSOO/OblSSOO/src/oblssoo/RSR.java</file>
         </group>
     </open-files>
 </project-private>

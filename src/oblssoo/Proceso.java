@@ -25,7 +25,7 @@ public class Proceso {
         this.instancia = instancia;
         this.instrucciones = instancia.getInstrucciones();
         this.colaInst = new LinkedList<>();
-        this.memoriaOcupada =  new LinkedList<>();
+        this.memoriaOcupada = new LinkedList<>();
         encolarInstrucciones(instrucciones);
         this.tRequeridoInst = Sistema.getInstByID(instrucciones.charAt(0)).getTiempoCPU();
         this.pos = 0;
@@ -102,22 +102,21 @@ public class Proceso {
         return colaInst.size();
     }
 
-    public void despacharInstr() {
-        //System.out.println("Se completó: "+ this.colaInst.element().toString());
-        this.colaInst.remove();
-        this.pos++;
-        if (getCantI() > 0) {
-            this.tiempoInst = this.colaInst.element().getTiempoCPU();
-            this.tRequeridoInst = this.colaInst.element().getTiempoCPU();
-        }
-    }
-
     public void restarTiempo(long t) {
         tiempoInst = tiempoInst.minusSeconds(1);
         if (tiempoInst.isZero()) {
             despacharInstr();
         }
 
+    }
+
+    public void despacharInstr() {
+        this.colaInst.remove();
+        this.pos++;
+        if (getCantI() > 0) {
+            this.tiempoInst = this.colaInst.element().getTiempoCPU();
+            this.tRequeridoInst = this.colaInst.element().getTiempoCPU();
+        }
     }
 
     public String getInstrucciones() {
@@ -162,20 +161,20 @@ public class Proceso {
     public boolean estaBloqueado() {
         return getEstado() == 3;
     }
-    
-    public int getPeso(){
+
+    public int getPeso() {
         return this.instancia.getPeso();
     }
-    
-    public void addDir(int pos){
+
+    public void addDir(int pos) {
         this.memoriaOcupada.add(pos);
     }
-    
-    public int pollDir(){
+
+    public int pollDir() {
         return this.memoriaOcupada.poll();
     }
-    
-    public boolean hayDir(){
-        return this.memoriaOcupada.size() > 0; 
+
+    public boolean hayDir() {
+        return this.memoriaOcupada.size() > 0;
     }
 }

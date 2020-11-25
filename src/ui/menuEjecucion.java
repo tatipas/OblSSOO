@@ -237,8 +237,8 @@ public class menuEjecucion extends javax.swing.JFrame {
         //sistema.setEjec(e);
         e.iniciarEjec();
         e.setVisible(true);
-        sistema.limpiarSistema();
-        selected.clear();
+        dispose();
+
     }//GEN-LAST:event_buttonIniciarActionPerformed
 
     private void buttonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSeleccionarActionPerformed
