@@ -43,5 +43,4 @@ public class Programa {
     public int getPeso(){
         return instrucciones.length();
     }
-
 }

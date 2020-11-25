@@ -5,6 +5,13 @@
  */
 package ui;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import oblssoo.*;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
+
 /**
  *
  * @author Graziano
@@ -14,8 +21,22 @@ public class menuEjecucion extends javax.swing.JFrame {
     /**
      * Creates new form menuEjecucion
      */
-    public menuEjecucion() {
+    private static Sistema sistema;
+    ListModel<Programa> model;
+    ArrayList<String> selected;
+
+    public menuEjecucion(Sistema s) {
         initComponents();
+        sistema = s;
+        String[] data = new String[sistema.getListaProgramas().size()];
+
+        for (int i = 0; i < sistema.getListaProgramas().size(); i++) {
+            data[i] = sistema.getListaProgramas().get(i).getInstrucciones();
+        }
+        selected = new ArrayList<>();
+        this.listProgramas.setListData(data);
+        this.listProcesos.setListData(toStrArray(selected));
+        this.progress.setMaximum(sistema.getMemoria().getCapacidad());
     }
 
     /**
@@ -37,7 +58,7 @@ public class menuEjecucion extends javax.swing.JFrame {
         listProcesos = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         buttonIniciar = new javax.swing.JButton();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        progress = new javax.swing.JProgressBar();
         buttonEliminar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
@@ -56,6 +77,11 @@ public class menuEjecucion extends javax.swing.JFrame {
         jLabel2.setText("Seleccionar los programas a ejecutar");
 
         buttonSeleccionar.setText("Seleccionar");
+        buttonSeleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSeleccionarActionPerformed(evt);
+            }
+        });
 
         listProcesos.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -77,6 +103,11 @@ public class menuEjecucion extends javax.swing.JFrame {
         });
 
         buttonEliminar.setText("Eliminar");
+        buttonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEliminarActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Seleccionados");
 
@@ -109,7 +140,7 @@ public class menuEjecucion extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(buttonIniciar)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(buttonEliminar)
                                 .addComponent(jLabel3)))
                         .addGap(0, 3, Short.MAX_VALUE)))
@@ -133,7 +164,7 @@ public class menuEjecucion extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addGap(4, 4, 4)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(buttonIniciar)
                         .addContainerGap())
@@ -162,9 +193,78 @@ public class menuEjecucion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void agregarSelectedaSistema() {
+        for (int i = 0; i < selected.size(); i++) {
+            Programa p = sistema.getProgramaByInstr(selected.get(i));
+            if (sistema.puedeCorrerProceso(p)) {
+                Proceso proc = new Proceso(p);
+                //sistema.agregarProceso(proc); //LO AGREGO?
+            } else {
+                JOptionPane.showMessageDialog(this, "Usted no tiene permiso para correr el programa " + p.getId(), p.toString(), i);
+            }
+        }
+    }
     private void buttonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarActionPerformed
-        // TODO add your handling code here:
+        boolean puede = true;
+        for (int i = 0; i < selected.size(); i++) {
+            Programa p = sistema.getProgramaByInstr(selected.get(i));
+            if (sistema.puedeCorrerProceso(p)) {
+                Proceso proc = new Proceso(p);
+                if (sistema.getMemoria().addOrQueueProceso(proc, sistema)) {
+                    System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
+                    JOptionPane.showMessageDialog(this, proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion", p.toString(), 1);
+                    //m.imprimirMemoria();
+                } else {
+                    System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
+                    JOptionPane.showMessageDialog(this, "No hay espacio suficiente para (" + proc.toString() + "). Se cargara cuando se libere memoria", p.toString(), 1);
+                }
+
+            } else {
+                puede = false;
+                JOptionPane.showMessageDialog(this, "Usted no tiene permiso para correr el programa " + p.getId(), p.toString(), i);
+            }
+        }
+        if (puede) {
+            ejecucion e = new ejecucion(sistema);
+            e.setVisible(true);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No tiene los permisos para ejecutar lo que seleccionó", "Mensaje", 1);
+        }
     }//GEN-LAST:event_buttonIniciarActionPerformed
+
+    private void buttonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSeleccionarActionPerformed
+        selected.add(listProgramas.getSelectedValue());
+        actualizarListaSelected();
+        actualizarProgressBar();
+    }//GEN-LAST:event_buttonSeleccionarActionPerformed
+
+    private void buttonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminarActionPerformed
+        selected.remove(listProcesos.getSelectedValue());
+        actualizarListaSelected();
+        actualizarProgressBar();
+    }//GEN-LAST:event_buttonEliminarActionPerformed
+
+    private void actualizarProgressBar(){
+        
+        int largo=0;
+        for (int i = 0; i < selected.size(); i++) {
+            largo+=selected.get(i).length();
+        }
+        this.progress.setValue(largo);
+    }
+    
+    private void actualizarListaSelected() {
+        listProcesos.setListData(toStrArray(selected));
+    }
+
+    private String[] toStrArray(ArrayList<String> list) {
+        String[] ret = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ret[i] = list.get(i);
+        }
+        return ret;
+    }
 
     /**
      * @param args the command line arguments
@@ -180,23 +280,31 @@ public class menuEjecucion extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(menuEjecucion.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(menuEjecucion.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(menuEjecucion.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(menuEjecucion.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new menuEjecucion().setVisible(true);
+                new menuEjecucion(sistema).setVisible(true);
             }
         });
     }
@@ -210,10 +318,10 @@ public class menuEjecucion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listProcesos;
     private javax.swing.JList<String> listProgramas;
+    private javax.swing.JProgressBar progress;
     // End of variables declaration//GEN-END:variables
 }

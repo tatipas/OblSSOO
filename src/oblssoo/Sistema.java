@@ -6,6 +6,7 @@ import java.time.*;
 import static java.time.Duration.ZERO;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import java.util.LinkedList;
+import ui.ejecucion;
 
 public class Sistema {
 
@@ -23,6 +24,7 @@ public class Sistema {
     private static boolean[][] permisos;
     private CPU cpu;
     private Memoria memoria;
+    private ejecucion ejec;
 
     public Sistema(long q) {
         this.listaProcesos = new ArrayList<>();
@@ -65,8 +67,38 @@ public class Sistema {
         this.quantum = Duration.of(quantum, SECONDS);
     }
 
+    public ejecucion getEjec() {
+        return ejec;
+    }
+
+    public void setEjec(ejecucion ejec) {
+        this.ejec = ejec;
+    }
+
     public byte getCantCola() {
         return (byte) colaDeEjecucion.size();
+    }
+    
+    public Programa getProgramaByInstr(String insrucciones){
+        Programa p = new Programa("");
+        for (int i = 0; i < listaProgramas.size(); i++) {
+            if(listaProgramas.get(i).getInstrucciones().equals(insrucciones)){
+                p= listaProgramas.get(i);
+            }
+        }
+        return p;
+    }
+    
+    public void iniciarEjecucion() {
+        this.setEnEjecucion();
+
+        while (this.getCantCola() != 0) {
+            this.siguienteInstante();
+        }
+        if (this.getListaBloqueados().size() > 0) {
+            System.out.println("DEADLOCK");
+            ejec.mostrar("DEADLOCK");
+        }
     }
 
     public Proceso getEnEjecucion() {
@@ -77,6 +109,7 @@ public class Sistema {
         this.enEjecucion = colaDeEjecucion.element();
         if (!enEjecucion.estaBloqueado()) {
             System.out.println(enEjecucion.toString() + " ha tomado el procesador");
+            ejec.mostrar(enEjecucion.toString() + " ha tomado el procesador");
         }
     }
 
@@ -105,6 +138,7 @@ public class Sistema {
 
     public void despacharProceso() {
         System.out.println(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
+        ejec.mostrar(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
         getMemoria().quitarDeMemoria(enEjecucion);
         desencolar();
         getMemoria().imprimirMemoria();
@@ -163,10 +197,10 @@ public class Sistema {
         listaBloqueados.add(p);
     }
 
-    public void siguienteInstante() throws InterruptedException {
+    public void siguienteInstante() {
         Instruccion i = enEjecucion.getInstEnEjecucion();
         System.out.println("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
-
+ejec.mostrar("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
         if (i.esPedir()) {
             RSR rec = (RSR) i.getRecurso();
             rec.encolar(enEjecucion);
@@ -180,6 +214,7 @@ public class Sistema {
             if (i.esDevolver()) {
                 RSR rec = (RSR) i.getRecurso();
                 System.out.println(enEjecucion.toString() + " devolvio el " + rec.getNombre());
+                ejec.mostrar(enEjecucion.toString() + " devolvio el " + rec.getNombre());
                 rec.desencolar();
                 if (!rec.colaVacia()) {
                     desbloquear(rec.getAtendido());
@@ -196,6 +231,7 @@ public class Sistema {
                 timeout();
                 tiempoEjec = ZERO;
                 System.out.println("El " + getEnEjecucion().toString() + " tomo el procesador por Timeout");
+                ejec.mostrar("El " + getEnEjecucion().toString() + " tomo el procesador por Timeout");
             }
         }
     }
@@ -281,12 +317,14 @@ public class Sistema {
         for (int i = 0; i < getListaProgramas().size(); i++) {
             Programa p = getListaProgramas().get(i);
             System.out.println(p.toString() + "| Intrucciones: " + p.getInstrucciones());
+            ejec.mostrar(p.toString() + "| Intrucciones: " + p.getInstrucciones());
         }
     }
 
     public void imprimirUsuarios() {
         for (int i = 0; i < getListaUsuarios().size(); i++) {
             System.out.println(getListaUsuarios().get(i).toString());
+            ejec.mostrar(getListaUsuarios().get(i).toString());
         }
     }
 

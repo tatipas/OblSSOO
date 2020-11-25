@@ -66,6 +66,10 @@ public class Memoria extends Recurso {
         return espacioLibre;
     }
 
+    public int getCapacidad() {
+        return capacidad;
+    }
+
     private void restarEspacio(Proceso p) {
         this.espacioLibre -= p.getPeso();
         return;

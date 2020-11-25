@@ -14,6 +14,7 @@ import oblssoo.Sistema;
 public class verRecursos extends javax.swing.JFrame {
 
     private Sistema sistema;
+    
     public verRecursos(Sistema s) {
         initComponents();
         sistema = s;

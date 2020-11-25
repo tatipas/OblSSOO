@@ -190,7 +190,7 @@ public class mainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonVerProgramasCargadosActionPerformed
 
     private void buttonEjecutarProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEjecutarProcesosActionPerformed
-        verPermisos v = new verPermisos(sistema);
+        menuEjecucion v = new menuEjecucion(sistema);
         v.setVisible(true);
         dispose();
     }//GEN-LAST:event_buttonEjecutarProcesosActionPerformed
