@@ -78,17 +78,17 @@ public class Sistema {
     public byte getCantCola() {
         return (byte) colaDeEjecucion.size();
     }
-    
-    public Programa getProgramaByInstr(String insrucciones){
+
+    public Programa getProgramaByInstr(String insrucciones) {
         Programa p = new Programa("");
         for (int i = 0; i < listaProgramas.size(); i++) {
-            if(listaProgramas.get(i).getInstrucciones().equals(insrucciones)){
-                p= listaProgramas.get(i);
+            if (listaProgramas.get(i).getInstrucciones().equals(insrucciones)) {
+                p = listaProgramas.get(i);
             }
         }
         return p;
     }
-    
+
     public void iniciarEjecucion() {
         this.setEnEjecucion();
 
@@ -141,7 +141,7 @@ public class Sistema {
         ejec.mostrar(this.colaDeEjecucion.element().toString() + " ha finalizado su ejecucion");
         getMemoria().quitarDeMemoria(enEjecucion);
         desencolar();
-        getMemoria().imprimirMemoria();
+        getMemoria().imprimirMemoria(this);
         getMemoria().addQueuedProcesos(this);
     }
 
@@ -200,7 +200,7 @@ public class Sistema {
     public void siguienteInstante() {
         Instruccion i = enEjecucion.getInstEnEjecucion();
         System.out.println("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
-ejec.mostrar("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
+        ejec.mostrar("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
         if (i.esPedir()) {
             RSR rec = (RSR) i.getRecurso();
             rec.encolar(enEjecucion);
@@ -221,7 +221,7 @@ ejec.mostrar("..........En ejecución: " + i.toString() + " en la posicion: " + 
                 }
             }
         }
-        //  Thread.sleep(1000);
+        // Thread.sleep(1000);
         agregarTiempoEjec(1);
         enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
         if (enEjecucion.getCantI() == 0) {

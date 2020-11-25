@@ -23,19 +23,14 @@ public class menuEjecucion extends javax.swing.JFrame {
      */
     private static Sistema sistema;
     ListModel<Programa> model;
-    ArrayList<String> selected;
+    ArrayList<Programa> selected;
 
     public menuEjecucion(Sistema s) {
         initComponents();
         sistema = s;
-        String[] data = new String[sistema.getListaProgramas().size()];
-
-        for (int i = 0; i < sistema.getListaProgramas().size(); i++) {
-            data[i] = sistema.getListaProgramas().get(i).getInstrucciones();
-        }
         selected = new ArrayList<>();
-        this.listProgramas.setListData(data);
-        this.listProcesos.setListData(toStrArray(selected));
+        this.listProgramas.setListData(sistema.getListaProgramas().toArray());
+        this.listProcesos.setListData(selected.toArray());
         this.progress.setMaximum(sistema.getMemoria().getCapacidad());
     }
 
@@ -51,26 +46,27 @@ public class menuEjecucion extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listProgramas = new javax.swing.JList<>();
+        listProgramas = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
         buttonSeleccionar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listProcesos = new javax.swing.JList<>();
+        listProcesos = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
         buttonIniciar = new javax.swing.JButton();
         progress = new javax.swing.JProgressBar();
         buttonEliminar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        buttonVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Ejecutar programas");
 
-        listProgramas.setModel(new javax.swing.AbstractListModel<String>() {
+        listProgramas.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(listProgramas);
 
@@ -83,10 +79,10 @@ public class menuEjecucion extends javax.swing.JFrame {
             }
         });
 
-        listProcesos.setModel(new javax.swing.AbstractListModel<String>() {
+        listProcesos.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane2.setViewportView(listProcesos);
 
@@ -111,6 +107,13 @@ public class menuEjecucion extends javax.swing.JFrame {
 
         jLabel4.setText("Seleccionados");
 
+        buttonVolver.setText("VOLVER");
+        buttonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -132,7 +135,10 @@ public class menuEjecucion extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(53, 53, 53)
-                        .addComponent(buttonSeleccionar)))
+                        .addComponent(buttonSeleccionar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonVolver)))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
@@ -166,7 +172,9 @@ public class menuEjecucion extends javax.swing.JFrame {
                         .addGap(4, 4, 4)
                         .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
-                        .addComponent(buttonIniciar)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonIniciar)
+                            .addComponent(buttonVolver))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
@@ -195,7 +203,7 @@ public class menuEjecucion extends javax.swing.JFrame {
 
     private void agregarSelectedaSistema() {
         for (int i = 0; i < selected.size(); i++) {
-            Programa p = sistema.getProgramaByInstr(selected.get(i));
+            Programa p = sistema.getProgramaByInstr(selected.get(i).getInstrucciones());
             if (sistema.puedeCorrerProceso(p)) {
                 Proceso proc = new Proceso(p);
                 //sistema.agregarProceso(proc); //LO AGREGO?
@@ -207,7 +215,7 @@ public class menuEjecucion extends javax.swing.JFrame {
     private void buttonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarActionPerformed
         boolean puede = true;
         for (int i = 0; i < selected.size(); i++) {
-            Programa p = sistema.getProgramaByInstr(selected.get(i));
+            Programa p = sistema.getProgramaByInstr(selected.get(i).getInstrucciones());
             if (sistema.puedeCorrerProceso(p)) {
                 Proceso proc = new Proceso(p);
                 if (sistema.getMemoria().addOrQueueProceso(proc, sistema)) {
@@ -227,14 +235,15 @@ public class menuEjecucion extends javax.swing.JFrame {
         if (puede) {
             ejecucion e = new ejecucion(sistema);
             e.setVisible(true);
-            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "No tiene los permisos para ejecutar lo que seleccionó", "Mensaje", 1);
         }
+        sistema.limpiarSistema();
+        selected.clear();
     }//GEN-LAST:event_buttonIniciarActionPerformed
 
     private void buttonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSeleccionarActionPerformed
-        selected.add(listProgramas.getSelectedValue());
+        selected.add((Programa)listProgramas.getSelectedValue());
         actualizarListaSelected();
         actualizarProgressBar();
     }//GEN-LAST:event_buttonSeleccionarActionPerformed
@@ -245,74 +254,36 @@ public class menuEjecucion extends javax.swing.JFrame {
         actualizarProgressBar();
     }//GEN-LAST:event_buttonEliminarActionPerformed
 
+    private void buttonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVolverActionPerformed
+        mainMenu v = new mainMenu(sistema);
+        v.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_buttonVolverActionPerformed
+
     private void actualizarProgressBar(){
         
         int largo=0;
         for (int i = 0; i < selected.size(); i++) {
-            largo+=selected.get(i).length();
+            largo += selected.get(i).getPeso();
         }
         this.progress.setValue(largo);
     }
     
     private void actualizarListaSelected() {
-        listProcesos.setListData(toStrArray(selected));
+        listProcesos.setListData(selected.toArray());
     }
 
-    private String[] toStrArray(ArrayList<String> list) {
-        String[] ret = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            ret[i] = list.get(i);
-        }
-        return ret;
-    }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
 
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(menuEjecucion.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new menuEjecucion(sistema).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonEliminar;
     private javax.swing.JButton buttonIniciar;
     private javax.swing.JButton buttonSeleccionar;
+    private javax.swing.JButton buttonVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -320,8 +291,8 @@ public class menuEjecucion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> listProcesos;
-    private javax.swing.JList<String> listProgramas;
+    private javax.swing.JList listProcesos;
+    private javax.swing.JList listProgramas;
     private javax.swing.JProgressBar progress;
     // End of variables declaration//GEN-END:variables
 }

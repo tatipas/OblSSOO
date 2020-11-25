@@ -15,7 +15,7 @@ public class Memoria extends Recurso {
         this.array = new boolean[capacidad];
         this.cola = new ArrayList<>();
         this.espacioLibre = d;
-        this.setTipo((byte)2); 
+        this.setTipo((byte) 2);
     }
 
     public boolean addOrQueueProceso(Proceso p, Sistema s) { // si se carga en memoria, devuelve true, sino false.
@@ -58,7 +58,7 @@ public class Memoria extends Recurso {
             cola.remove(p);
             s.desbloquear(p);
             System.out.println("Se cargo a " + p.toString() + " en memoria");
-            imprimirMemoria();
+            imprimirMemoria(s);
         }
     }
 
@@ -88,7 +88,7 @@ public class Memoria extends Recurso {
         restarEspacio(p);
     }
 
-    public void imprimirMemoria() {
+    public void imprimirMemoria(Sistema sis) {
         String r = "Espacio libre de Memoria: " + this.espacioLibre + "/" + array.length + " [";
         for (int i = 0; i < array.length; i++) {
             if (array[i]) {
@@ -99,10 +99,11 @@ public class Memoria extends Recurso {
         }
         r += "]";
         System.out.println(r);
+        sis.getEjec().mostrar(r);
     }
-    
-    public void reset(){
-                this.array = new boolean[capacidad];
+
+    public void reset() {
+        this.array = new boolean[capacidad];
         this.cola.clear();
         this.espacioLibre = capacidad;
     }

@@ -66,6 +66,10 @@
                           <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                           <Component id="buttonSeleccionar" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Component id="buttonVolver" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -107,7 +111,10 @@
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Component id="progress" min="-2" pref="23" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="buttonIniciar" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="buttonIniciar" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="buttonVolver" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -150,7 +157,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -188,7 +195,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -229,6 +236,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Seleccionados"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="buttonVolver">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="VOLVER"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVolverActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
