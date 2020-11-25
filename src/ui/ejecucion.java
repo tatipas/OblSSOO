@@ -23,6 +23,9 @@ public class ejecucion extends javax.swing.JFrame {
        setDefaultCloseOperation(HIDE_ON_CLOSE);
         sistema = s;
         sistema.setEjec(this);
+    }
+    
+    public void iniciarEjec(){
         sistema.iniciarEjecucion();
     }
 

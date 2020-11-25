@@ -219,6 +219,7 @@ public class menuEjecucion extends javax.swing.JFrame {
     }
     private void buttonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarActionPerformed
         String out = "";
+        ejecucion e = new ejecucion(sistema);
         for (int i = 0; i < selected.size(); i++) {
             Programa p = sistema.getProgramaByInstr(selected.get(i).getInstrucciones());
             Proceso proc = new Proceso(p);
@@ -232,7 +233,9 @@ public class menuEjecucion extends javax.swing.JFrame {
             }
         }
         JOptionPane.showMessageDialog(this, out, "Resumen", 1);
-        ejecucion e = new ejecucion(sistema);
+        
+        //sistema.setEjec(e);
+        e.iniciarEjec();
         e.setVisible(true);
         sistema.limpiarSistema();
         selected.clear();

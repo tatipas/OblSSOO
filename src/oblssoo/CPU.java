@@ -14,7 +14,6 @@ public class CPU extends Recurso {
         instrucciones[0] = i1;
         instrucciones[1] = i2;
         instrucciones[2] = i3;
-
     }
 
     public Instruccion[] getInstrucciones() {

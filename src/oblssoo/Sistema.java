@@ -193,6 +193,7 @@ public class Sistema {
     }
 
     public void agregarProcesoBloqueado(Proceso p) {
+        
         p.setEstadoBloqueado(this);
         listaBloqueados.add(p);
     }
