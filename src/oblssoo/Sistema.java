@@ -203,7 +203,7 @@ public class Sistema {
         ejec.mostrar("..........En ejecución: " + i.toString() + " en la posicion: " + enEjecucion.getPos());
         if (i.esPedir()) {
             RSR rec = (RSR) i.getRecurso();
-            rec.encolar(enEjecucion);
+            rec.encolar(enEjecucion, this);
 
             if (!rec.getAtendido().equals(enEjecucion)) {
                 enEjecucion.despacharInstr();

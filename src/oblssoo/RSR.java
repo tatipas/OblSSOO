@@ -35,10 +35,11 @@ public class RSR extends Recurso {
         return instrucciones[2];
     }
 
-    public void encolar(Proceso p) {
+    public void encolar(Proceso p, Sistema s) {
         this.colaDeEspera.add(p);
         if (getAtendido().equals(p)) {
             System.out.println(p.toString() + "tomo " + this.getNombre());
+            s.getEjec().mostrar(p.toString() + "tomo " + this.getNombre());
         }
     }
 
