@@ -43,10 +43,11 @@ public class RSR extends Recurso {
         }
     }
 
-    public void desencolar() {
+    public void desencolar(Sistema s) {
         this.colaDeEspera.remove();
         if (colaDeEspera.size() > 0) {
             System.out.println(getAtendido() + "tomo " + this.getNombre());
+            s.getEjec().mostrar(getAtendido() + "tomo " + this.getNombre());
         }
     }
     

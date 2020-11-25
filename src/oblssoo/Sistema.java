@@ -193,7 +193,7 @@ public class Sistema {
     }
 
     public void agregarProcesoBloqueado(Proceso p) {
-        p.setEstadoBloqueado();
+        p.setEstadoBloqueado(this);
         listaBloqueados.add(p);
     }
 
@@ -215,7 +215,7 @@ public class Sistema {
                 RSR rec = (RSR) i.getRecurso();
                 System.out.println(enEjecucion.toString() + " devolvio el " + rec.getNombre());
                 ejec.mostrar(enEjecucion.toString() + " devolvio el " + rec.getNombre());
-                rec.desencolar();
+                rec.desencolar(this);
                 if (!rec.colaVacia()) {
                     desbloquear(rec.getAtendido());
                 }

@@ -76,9 +76,10 @@ public class Proceso {
         this.estado = 2;
     }
 
-    public void setEstadoBloqueado() {
+    public void setEstadoBloqueado(Sistema s) {
         this.estado = 3;
         System.out.println("Se bloqueo " + this.toString());
+        s.getEjec().mostrar("Se bloqueo " + this.toString());
     }
 
     public void encolarInstr(Instruccion i) {
