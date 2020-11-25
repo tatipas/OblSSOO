@@ -29,6 +29,7 @@ public class menuEjecucion extends javax.swing.JFrame {
         initComponents();
         sistema = s;
         selected = new ArrayList<>();
+        txtAviso.setText("");
         this.listProgramas.setListData(sistema.getListaProgramas().toArray());
         this.listProcesos.setListData(selected.toArray());
         this.progress.setMaximum(sistema.getMemoria().getCapacidad());
@@ -57,6 +58,7 @@ public class menuEjecucion extends javax.swing.JFrame {
         buttonEliminar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         buttonVolver = new javax.swing.JButton();
+        txtAviso = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,43 +116,44 @@ public class menuEjecucion extends javax.swing.JFrame {
             }
         });
 
+        txtAviso.setForeground(new java.awt.Color(153, 51, 0));
+        txtAviso.setText("txtAviso");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(135, 135, 135))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(buttonSeleccionar))
+                        .addGap(233, 233, 233)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(buttonVolver)))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                        .addComponent(buttonVolver))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(buttonIniciar)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(buttonEliminar)
-                                .addComponent(jLabel3)))
-                        .addGap(0, 3, Short.MAX_VALUE)))
-                .addGap(16, 16, 16))
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(buttonSeleccionar))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonIniciar, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(jLabel4)
+                    .addComponent(jScrollPane2)
+                    .addComponent(buttonEliminar)
+                    .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtAviso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,23 +174,25 @@ public class menuEjecucion extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(4, 4, 4)
                         .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addGap(5, 5, 5)
+                        .addComponent(txtAviso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buttonIniciar)
                             .addComponent(buttonVolver))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
-                        .addGap(22, 22, 22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(buttonSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36))))
+                        .addGap(47, 47, 47))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 404, Short.MAX_VALUE)
+            .addGap(0, 595, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -213,39 +218,35 @@ public class menuEjecucion extends javax.swing.JFrame {
         }
     }
     private void buttonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarActionPerformed
-        boolean puede = true;
+        String out = "";
         for (int i = 0; i < selected.size(); i++) {
             Programa p = sistema.getProgramaByInstr(selected.get(i).getInstrucciones());
-            if (sistema.puedeCorrerProceso(p)) {
-                Proceso proc = new Proceso(p);
-                if (sistema.getMemoria().addOrQueueProceso(proc, sistema)) {
-                    System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
-                    JOptionPane.showMessageDialog(this, proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion", p.toString(), 1);
-                    //m.imprimirMemoria();
-                } else {
-                    System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
-                    JOptionPane.showMessageDialog(this, "No hay espacio suficiente para (" + proc.toString() + "). Se cargara cuando se libere memoria", p.toString(), 1);
-                }
-
+            Proceso proc = new Proceso(p);
+            if (sistema.getMemoria().addOrQueueProceso(proc, sistema)) {
+                System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
+                out += proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion" + "\n";
+                //m.imprimirMemoria();
             } else {
-                puede = false;
-                JOptionPane.showMessageDialog(this, "Usted no tiene permiso para correr el programa " + p.getId(), p.toString(), i);
+                System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
+                out += "No hay espacio suficiente para (" + proc.toString() + "). Se cargara cuando se libere memoria \n";
             }
         }
-        if (puede) {
-            ejecucion e = new ejecucion(sistema);
-            e.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "No tiene los permisos para ejecutar lo que seleccionó", "Mensaje", 1);
-        }
+        JOptionPane.showMessageDialog(this, out, "Resumen", 1);
+        ejecucion e = new ejecucion(sistema);
+        e.setVisible(true);
         sistema.limpiarSistema();
         selected.clear();
     }//GEN-LAST:event_buttonIniciarActionPerformed
 
     private void buttonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSeleccionarActionPerformed
-        selected.add((Programa)listProgramas.getSelectedValue());
-        actualizarListaSelected();
-        actualizarProgressBar();
+        Programa seleccionado = (Programa) listProgramas.getSelectedValue();
+        if (sistema.puedeCorrerProceso(seleccionado)) {
+            selected.add((Programa) listProgramas.getSelectedValue());
+            actualizarListaSelected();
+            actualizarProgressBar();
+        } else {
+            txtAviso.setText("No tiene los permisos para poder ejecutar el Programa " + seleccionado.getId());
+        }
     }//GEN-LAST:event_buttonSeleccionarActionPerformed
 
     private void buttonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminarActionPerformed
@@ -260,24 +261,22 @@ public class menuEjecucion extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_buttonVolverActionPerformed
 
-    private void actualizarProgressBar(){
-        
-        int largo=0;
+    private void actualizarProgressBar() {
+
+        int largo = 0;
         for (int i = 0; i < selected.size(); i++) {
             largo += selected.get(i).getPeso();
         }
         this.progress.setValue(largo);
     }
-    
+
     private void actualizarListaSelected() {
         listProcesos.setListData(selected.toArray());
     }
 
-
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonEliminar;
@@ -294,5 +293,6 @@ public class menuEjecucion extends javax.swing.JFrame {
     private javax.swing.JList listProcesos;
     private javax.swing.JList listProgramas;
     private javax.swing.JProgressBar progress;
+    private javax.swing.JLabel txtAviso;
     // End of variables declaration//GEN-END:variables
 }

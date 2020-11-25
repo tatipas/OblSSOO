@@ -82,7 +82,7 @@ public class OblSSOO {
                 a[i] = proc;
                 if (m.addOrQueueProceso(proc, s)) {
                     System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
-                    m.imprimirMemoria();
+                    m.imprimirMemoria(s);
                 } else {
                     System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");
                 }
@@ -93,7 +93,7 @@ public class OblSSOO {
                 a[i] = proc;
                 if (m.addOrQueueProceso(proc, s)) {
                     System.out.println(proc.toString() + " se cargo en memoria y se agrego a la cola de ejecucion");
-                    m.imprimirMemoria();
+                    m.imprimirMemoria(s);
 
                 } else {
                     System.out.println("No hay espacio suficiente para " + proc.toString() + " || Se cargara cuando se libere memoria");

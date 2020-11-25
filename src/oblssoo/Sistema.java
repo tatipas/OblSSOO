@@ -221,7 +221,7 @@ public class Sistema {
                 }
             }
         }
-        // Thread.sleep(1000);
+        //Thread.sleep(1000);
         agregarTiempoEjec(1);
         enEjecucion.restarTiempo(1); // se resta al tiempo de la instruccion, y si llega a 0, se pasa a la siguiente instruccion
         if (enEjecucion.getCantI() == 0) {
