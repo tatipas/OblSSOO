@@ -346,11 +346,17 @@ public class Sistema {
         Programa p2 = new Programa("BABDEFAAM");
         Programa p3 = new Programa("DBAGEHFIBA");
         Programa p4 = new Programa("GADHFIBCDDB");
+                Programa p5 = new Programa("DAJEFKGHLAI");
+        Programa p6 = new Programa("DEGHFIJAKL");
+        Programa p7 = new Programa("JGKHIL");
 
         agregarPrograma(p1);
         agregarPrograma(p2);
         agregarPrograma(p3);
         agregarPrograma(p4);
+                agregarPrograma(p5);
+        agregarPrograma(p6);
+        agregarPrograma(p7);
     }
 
     public void crearUsuarios() {
